@@ -2,10 +2,10 @@ random_seed: 444
 
 dataset:
   type: &dataset_type 'KITTI'
-  root_dir: '/home/usrg/mono3d_ws/KITTI'  # change this path to your own dataset path
+  root_dir: '../../data/raw/KITTI_3DOD'  # change this path to your own dataset path
   train_split: 'train'
   test_split: 'val'
-  batch_size: 8
+  batch_size: 16
   use_3d_center: True
   class_merging: False
   use_dontcare: False
@@ -32,7 +32,7 @@ model:
   device: 'cuda'
 
   # Backbone
-  backbone: 'vitb'          # resnet50, dla34, dla60, vits, vitb tested
+  backbone: 'vits'          # resnet50, dla34, dla60, vits, vitb tested
   train_backbone: True
   num_feature_levels: 3
   dilation: False
@@ -107,11 +107,11 @@ lr_scheduler:
 
 trainer:
   max_epoch: 195
-  gpu_ids: '0,1,2,3'
+  gpu_ids: '0,1'
   save_frequency: 1  # checkpoint save interval (in epoch)
   # resume_model: True
-  # pretrain_model: path/to/ckpt
-  save_path: 'outputs/'
+  # pretrain_model: '../../outputs/mdino_local/small/checkpoint.pth'
+  save_path: '../../outputs/mdino_local'
   save_all: False  # False for only savng the best and latest ckpts
   use_dn: False
   scalar: 1

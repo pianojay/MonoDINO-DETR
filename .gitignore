@@ -4,3 +4,5 @@ outputs/
 
 *.pyc
 __pycache__/
+
+lib/models/monodinodetr/ops/

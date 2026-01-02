@@ -11,6 +11,7 @@
 Backbone modules.
 """
 from collections import OrderedDict
+from pathlib import Path
 
 import torch
 import torch.nn.functional as F
@@ -173,7 +174,15 @@ class BackboneViT(nn.Module):
         # Initialize DepthAnythingV2 with DINOv2 backbone
         if name in depthanything_model_configs:
             depth_anything = DepthAnythingV2(**depthanything_model_configs[name])
-            model_weights_path = f'/home/usrg/MonoDINO-DETR/checkpoints/depth_anything_v2_{name}.pth'  # Update with your path
+            weights_root = Path(__file__).resolve().parents[5] / "checkpoints" / "dav2"
+            weight_map = {
+                'vits': weights_root / "depth_anything_v2_vits.pth",
+                'vitb': weights_root / "depth_anything_v2_vitb.pth",
+                'vitl': weights_root / "depth_anything_v2_vitl.pth",
+            }
+            model_weights_path = weight_map.get(name)
+            if model_weights_path is None or not model_weights_path.exists():
+                raise FileNotFoundError(f"No pretrained weights configured for '{name}' under {weights_root}")
 
             # Load pre-trained weights
             depth_anything.load_state_dict(torch.load(model_weights_path, map_location='cpu'))
